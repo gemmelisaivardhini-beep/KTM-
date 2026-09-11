@@ -1,0 +1,143 @@
+
+$('.home-spotlight').slick({
+  dots: true,
+   arrows: false,
+  infinite: true,
+  speed: 1000,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  autoplay: true,
+  autoplaySpeed: 5000,
+});
+
+
+
+$('.upcoming-event-slider').slick({
+  dots: true,
+  arrows: true,
+  infinite: false,
+  speed: 1000,
+  slidesToShow: 3,
+  slidesToScroll: 3,
+  responsive: [
+    {
+      breakpoint: 991,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 2,
+        infinite: true,
+        dots: true,
+		arrows: false  
+      }
+    },
+    {
+      breakpoint: 480,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+		arrows: false  
+      }
+    }
+  ]
+});
+
+
+
+$('.expert-slider').slick({
+  dots: true,
+  arrows: true,
+  infinite: false,
+  speed: 1000,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+});
+
+/*function sliderInit() {
+if($(".expert-slider .expert-speak-slider.slick-slide").length > 1){
+var slider = $('.expert-slider').slick({
+  dots: true,
+  arrows: true,
+  infinite: false,
+  speed: 1000,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+});
+}
+}
+
+sliderInit();*/
+
+
+
+
+
+var offstObject=0;
+function tab(obj){
+	for(i=0;i<=$(".tabber ul li").length;i++){
+	$(".tab-content:eq("+i+")").hide();	
+	$(".tabber ul li:eq("+i+") a").removeClass("active");	
+	}
+	$(".tab-content:eq("+obj+")").show();	
+	$(".tabber ul li:eq("+obj+") a").addClass("active");	
+	$('.tours-slider').slick('refresh');
+}
+function tab1(obj){
+	for(i=0;i<=$(".tabber ul li").length;i++){
+	$(".tab-content:eq("+i+")").hide();	
+	$(".tabber ul li:eq("+i+") a").removeClass("active");	
+	}
+	$(".tab-content:eq("+obj+")").show();	
+	$(".tabber ul li:eq("+obj+") a").addClass("active");	
+}
+
+$('.tours-slider').slick({
+    dots: false,
+    arrows: true,
+    infinite: false,
+    speed: 1000,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  autoplay: false
+});
+
+$('.tour').click(function (){
+    var tabIndex = $(this).attr('data-index');
+    $('.tour-' + tabIndex).removeClass('active');
+    $(this).addClass('active');
+    var tagid = $(this).data('tag');
+    $('.tour-sec' + tabIndex).removeClass('active').addClass('noDisplay');
+    $('#' + tagid).addClass('active').removeClass('noDisplay ');
+	$('.tours-slider').slick('refresh');
+  });
+
+
+
+
+$(document).ready(function(){
+  
+  $('.our-experts-sec > ul > li > a').click(function(){
+
+      $('.our-experts-sec > ul > li').addClass('filter');
+       $('.our-expert-wrapper').addClass('active');
+
+    var tab_id = $(this).attr('data-tab');
+
+    $('.our-experts-sec > ul > li > a').removeClass('active');
+    
+
+    $('.our-expert-content').removeClass('active');
+
+    $(this).addClass('active');
+    $("#"+tab_id).addClass('active');
+  });
+
+  $(".exper-close-btn i").click(function(){
+    $('.our-expert-content').removeClass('active');
+    $('.our-experts-sec > ul > li > a').removeClass('active');
+     $('.our-experts-sec > ul > li').removeClass('filter');
+     $('.our-expert-wrapper').removeClass('active');
+  });
+
+});
+
+

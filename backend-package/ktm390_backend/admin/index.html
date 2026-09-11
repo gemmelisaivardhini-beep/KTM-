@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KTM 390 Adventure Admin</title>
+<style>
+body{font-family:Arial,sans-serif;background:#111;color:#fff;margin:0;padding:30px}
+.container{max-width:1100px;margin:auto}
+.card{background:#1d1d1d;border:1px solid #333;border-radius:14px;padding:22px;margin:15px 0}
+input,button{padding:12px;border-radius:8px;border:1px solid #555;margin:5px}
+input{background:#111;color:#fff}
+button{cursor:pointer;background:#ff6600;color:#fff;border:0}
+.hidden{display:none}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+table{width:100%;border-collapse:collapse;margin-top:15px}
+th,td{border:1px solid #444;padding:9px;text-align:left}
+@media(max-width:700px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>KTM 390 Adventure — Admin</h1>
+
+<div id="loginBox" class="card">
+<h2>Admin Login</h2>
+<input id="username" placeholder="Username" value="admin">
+<input id="password" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+<p id="loginMsg"></p>
+</div>
+
+<div id="dashboard" class="hidden">
+<button onclick="logout()">Logout</button>
+<div class="grid">
+<div class="card"><h3>Contacts</h3><div id="contactsCount">0</div></div>
+<div class="card"><h3>Test Rides</h3><div id="ridesCount">0</div></div>
+<div class="card"><h3>Subscribers</h3><div id="subsCount">0</div></div>
+</div>
+<div class="card"><h2>Contact Messages</h2><div id="contacts"></div></div>
+<div class="card"><h2>Test Ride Requests</h2><div id="rides"></div></div>
+<div class="card"><h2>Subscribers</h2><div id="subs"></div></div>
+</div>
+</div>
+
+<script>
+const API = '../';
+async function login(){
+  const r=await fetch(API+'admin/login.php',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({username:username.value,password:password.value})});
+  const d=await r.json();
+  loginMsg.textContent=d.message;
+  if(d.success){loginBox.classList.add('hidden');dashboard.classList.remove('hidden');load();}
+}
+async function load(){
+  const r=await fetch(API+'admin/dashboard.php'); const d=await r.json();
+  if(!d.success){return;}
+  contactsCount.textContent=d.data.contacts_count;
+  ridesCount.textContent=d.data.test_rides_count;
+  subsCount.textContent=d.data.subscribers_count;
+  contacts.innerHTML=table(d.data.contacts,['name','email','phone','message','created_at']);
+  rides.innerHTML=table(d.data.test_rides,['name','email','phone','city','date','preferred_time','created_at']);
+  subs.innerHTML=table(d.data.subscribers,['email','created_at']);
+}
+function table(rows,keys){
+  if(!rows.length)return '<p>No records yet.</p>';
+  return '<table><tr>'+keys.map(k=>'<th>'+k+'</th>').join('')+'</tr>'+
+    rows.map(row=>'<tr>'+keys.map(k=>'<td>'+escapeHtml(row[k]??'')+'</td>').join('')+'</tr>').join('')+'</table>';
+}
+function escapeHtml(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
+async function logout(){
+  await fetch(API+'admin/logout.php'); location.reload();
+}
+</script>
+</body>
+</html>
