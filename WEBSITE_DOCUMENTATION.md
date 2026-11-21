@@ -148,6 +148,7 @@ The homepage sends contact data to `api/contact.php`:
 
 The homepage sends test-ride data to `api/test-ride.php`:
 
+- `model`
 - `name`
 - `email`
 - `phone`
@@ -156,6 +157,12 @@ The homepage sends test-ride data to `api/test-ride.php`:
 - `preferred_time`
 
 The frontend only displays a success message when the API returns `success: true`.
+
+### Submission notifications
+
+Both test-ride bookings and contact enquiries are stored in the JSON files and passed to PHP's mail service for notification. The recipient defaults to the address transcribed from the project note and can be overridden on the server with `BOOKING_NOTIFICATION_EMAIL`. Set `BOOKING_NOTIFICATION_FROM` to a valid sender address for the deployed domain.
+
+PHP's `mail()` must be configured by the hosting provider for notification emails to leave the server. A booking is still saved to the local JSON file if mail delivery fails; the failure is written to the PHP error log.
 
 ## Admin Dashboard
 

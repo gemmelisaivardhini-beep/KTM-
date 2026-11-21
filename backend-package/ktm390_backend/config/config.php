@@ -9,6 +9,14 @@ define('LOG_PATH', BASE_PATH . DIRECTORY_SEPARATOR . 'logs');
 define('ADMIN_USERNAME', 'admin');
 define('ADMIN_PASSWORD', 'admin123'); // Change this before deployment.
 
+// Change this in the server environment before launch if the recipient changes.
+// The fallback is transcribed from the supplied project note.
+define(
+    'BOOKING_NOTIFICATION_EMAIL',
+    getenv('BOOKING_NOTIFICATION_EMAIL') ?: 'gemmehisanivasaadmini@gmail.com'
+);
+define('BOOKING_NOTIFICATION_FROM', getenv('BOOKING_NOTIFICATION_FROM') ?: '');
+
 date_default_timezone_set('Asia/Kolkata');
 
 if (!is_dir(DATA_PATH)) mkdir(DATA_PATH, 0775, true);
@@ -38,6 +46,54 @@ function clean(string $value): string {
 
 function validEmail(string $email): bool {
     return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+}
+
+function sendSubmissionNotification(string $subject, array $record): bool {
+    $recipient = BOOKING_NOTIFICATION_EMAIL;
+
+    if (!validEmail($recipient)) {
+        error_log('KTM form notification skipped: notification recipient is invalid.');
+        return false;
+    }
+
+    $lines = [
+        APP_NAME,
+        '',
+        'A new website submission was received.',
+        ''
+    ];
+
+    foreach ($record as $label => $value) {
+        $readableLabel = ucwords(str_replace('_', ' ', (string)$label));
+        $lines[] = $readableLabel . ': ' . (string)$value;
+    }
+
+    $headers = [
+        'MIME-Version: 1.0',
+        'Content-Type: text/plain; charset=UTF-8'
+    ];
+
+    if (validEmail(BOOKING_NOTIFICATION_FROM)) {
+        $headers[] = 'From: ' . BOOKING_NOTIFICATION_FROM;
+    }
+
+    $replyTo = (string)($record['email'] ?? '');
+    if (validEmail($replyTo)) {
+        $headers[] = 'Reply-To: ' . str_replace(["\r", "\n"], '', $replyTo);
+    }
+
+    $sent = @mail(
+        $recipient,
+        str_replace(["\r", "\n"], '', $subject),
+        implode("\n", $lines),
+        implode("\r\n", $headers)
+    );
+
+    if (!$sent) {
+        error_log('KTM form notification could not be sent. Submission remains saved locally.');
+    }
+
+    return $sent;
 }
 
 function appendJson(string $filename, array $record): bool {

@@ -26,6 +26,8 @@ if(appRoot && createApp){
 
             testRide:false,
 
+            modelDetails:null,
+
             message:"",
 
             submitting:false,
@@ -36,6 +38,7 @@ if(appRoot && createApp){
 
 
             ride:{
+                model:"KTM 390 Adventure",
                 name:"",
                 phone:"",
                 city:"",
@@ -247,6 +250,38 @@ if(appRoot && createApp){
 
                 code:"#e8edf0"
 
+            },
+
+            models:{
+
+                adventure:{
+                    title:"390 Adventure",
+                    bookingModel:"KTM 390 Adventure",
+                    kicker:"BASE ADVENTURE MODEL",
+                    image:"bike2.webp",
+                    description:"A versatile middleweight adventure motorcycle for city commuting, weekend touring and roads that turn rough.",
+                    stats:["349.32 CC", "41.5 PS", "33.5 NM"],
+                    features:[
+                        "Ride modes and 5-inch TFT display",
+                        "Adventure-focused 19 / 17 wheel setup",
+                        "Long-travel suspension and upright ergonomics"
+                    ]
+                },
+
+                enduro:{
+                    title:"390 Enduro",
+                    bookingModel:"KTM 390 Enduro",
+                    kicker:"TRAIL-FOCUSED CONCEPT",
+                    image:"images%20(1).jpg",
+                    description:"A trail-led 390 concept with an emphasis on ground clearance, control and confidence when the route gets unpredictable.",
+                    stats:["390 PLATFORM", "OFF-ROAD ABS", "TRAIL READY"],
+                    features:[
+                        "High-clearance, off-road-oriented stance",
+                        "Wider trail focus with balanced chassis control",
+                        "Rally-inspired ergonomics for standing riding"
+                    ]
+                }
+
             }
 
         };
@@ -255,6 +290,22 @@ if(appRoot && createApp){
 
 
     methods:{
+
+        showModelDetails(model){
+
+            this.modelDetails=this.models[model] || null;
+
+        },
+
+
+        openBooking(model="KTM 390 Adventure"){
+
+            this.modelDetails=null;
+            this.rideMessage="";
+            this.ride.model=model;
+            this.testRide=true;
+
+        },
 
 
         scrollToSection(id){
@@ -334,12 +385,13 @@ if(appRoot && createApp){
             if(
                 !this.ride.name ||
                 !this.ride.phone ||
+                !this.ride.model ||
                 !this.ride.city ||
                 !this.ride.date
             ){
 
                 this.rideMessage =
-                    "Please complete your name, phone, city and date.";
+                    "Please complete your model, name, phone, city and date.";
 
                 return;
 
@@ -358,6 +410,7 @@ if(appRoot && createApp){
                             "Content-Type":"application/json"
                         },
                         body:JSON.stringify({
+                            model:this.ride.model,
                             name:this.ride.name,
                             email:this.ride.email,
                             phone:this.ride.phone,
@@ -386,6 +439,7 @@ if(appRoot && createApp){
                     this.rideMessage="";
 
                     this.ride={
+                        model:"KTM 390 Adventure",
                         name:"",
                         phone:"",
                         city:"",
@@ -1196,8 +1250,56 @@ if(appRoot && createApp){
 
         });
 
+        const bookingModel =
+            new URLSearchParams(window.location.search).get("book");
+
+        const bookingModels={
+            adventure:"KTM 390 Adventure",
+            adventurex:"KTM 390 Adventure X",
+            enduro:"KTM 390 Enduro",
+            duke:"KTM 390 Duke"
+        };
+
+        if(bookingModel && bookingModels[bookingModel]){
+
+            this.openBooking(bookingModels[bookingModel]);
+
+        }
+
     }
 
     }).mount(appRoot);
 
 }
+
+
+document.querySelectorAll(".navbar").forEach(navbar=>{
+
+    const menu=navbar.querySelector(".menu");
+    const nav=navbar.querySelector("nav");
+
+    if(!menu || !nav){
+        return;
+    }
+
+    menu.setAttribute("aria-expanded", "false");
+
+    menu.addEventListener("click", ()=>{
+
+        const isOpen=nav.classList.toggle("open");
+        menu.setAttribute("aria-expanded", String(isOpen));
+
+    });
+
+    nav.querySelectorAll("a").forEach(link=>{
+
+        link.addEventListener("click", ()=>{
+
+            nav.classList.remove("open");
+            menu.setAttribute("aria-expanded", "false");
+
+        });
+
+    });
+
+});

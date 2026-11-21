@@ -32,4 +32,6 @@ if (!appendJson('contacts.json', $record)) {
     jsonResponse(false, 'Could not save your message.', [], 500);
 }
 
+sendSubmissionNotification('New KTM website enquiry', $record);
+
 jsonResponse(true, 'Thank you! Your message has been received.');
