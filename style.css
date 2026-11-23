@@ -146,6 +146,7 @@ a{
 .navbar nav{
     display:flex;
     gap:30px;
+    margin-left:auto;
 }
 
 .navbar nav a{
@@ -175,6 +176,25 @@ a{
     border:0;
 
     font-size:25px;
+}
+
+.nav-back{
+    margin-left:18px;
+    padding:9px 14px;
+    border:1px solid #3e3e3e;
+    background:rgba(0,0,0,.35);
+    color:#fff;
+    font:700 10px Orbitron, sans-serif;
+    letter-spacing:1.5px;
+    cursor:pointer;
+    transition:.25s ease;
+}
+
+.nav-back:hover,
+.nav-back:focus-visible{
+    border-color:#ff5b00;
+    color:#ff7a32;
+    outline:none;
 }
 
 
@@ -599,7 +619,7 @@ a{
     position:relative;
     z-index:20;
     max-width:1200px;
-    margin:-30px auto 0;
+    margin:36px auto 0;
     padding:0 7%;
     display:grid;
     grid-template-columns:repeat(3,1fr);
@@ -737,6 +757,15 @@ a{
     grid-template-columns:1.35fr 1fr 1fr;
     grid-template-rows:260px 190px;
     gap:18px;
+}
+
+.media-grid.media-sequence{
+    grid-template-columns:repeat(3, minmax(0,1fr));
+    grid-template-rows:360px;
+}
+
+.media-sequence .media-card{
+    min-height:360px;
 }
 
 .media-card{
@@ -1929,12 +1958,35 @@ footer small{
     margin-bottom:12px;
 }
 
+.modal-actions{
+    display:flex;
+    gap:12px;
+    margin-top:8px;
+}
+
+.modal-actions button{
+    flex:1;
+}
+
+.modal-back{
+    min-width:110px;
+}
+
 
 /* ==============================
    RESPONSIVE
 ============================== */
 
 @media(max-width:1000px){
+
+    .media-grid.media-sequence{
+        grid-template-columns:repeat(3, minmax(0,1fr));
+        grid-template-rows:280px;
+    }
+
+    .media-sequence .media-card{
+        min-height:280px;
+    }
 
     .performance-grid{
         grid-template-columns:
@@ -2021,6 +2073,13 @@ footer small{
 
     .menu{
         display:block;
+    }
+
+    .nav-back{
+        margin-left:auto;
+        margin-right:12px;
+        padding:8px 10px;
+        font-size:9px;
     }
 
     .hero{
@@ -2228,6 +2287,21 @@ footer small{
     overflow:hidden;
     display:flex;
     align-items:center;
+    isolation:isolate;
+    background:
+        linear-gradient(90deg, rgba(5,5,5,.94) 0%, rgba(5,5,5,.75) 37%, rgba(5,5,5,.26) 72%, rgba(5,5,5,.5) 100%),
+        linear-gradient(0deg, rgba(5,5,5,.68), transparent 50%),
+        url("bike.webp") center 42% / cover no-repeat,
+        #050505;
+}
+
+.duke-hero::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    background:radial-gradient(circle at 70% 36%, transparent 0 16%, rgba(5,5,5,.15) 46%, rgba(5,5,5,.62) 100%);
 }
 
 .duke-hero::after{
@@ -2465,6 +2539,20 @@ footer small{
 }
 
 @media(max-width:600px){
+
+    .media-grid.media-sequence{
+        grid-template-columns:1fr;
+        grid-template-rows:repeat(3, 240px);
+    }
+
+    .media-sequence .media-card{
+        min-height:240px;
+    }
+
+    .modal-actions{
+        flex-direction:column;
+    }
+
     .hero-content{
         width:100%;
         max-width:100%;

@@ -36,6 +36,8 @@ if(appRoot && createApp){
 
             rideSubmitting:false,
 
+            bookingReturnUrl:"",
+
 
             ride:{
                 model:"KTM 390 Adventure",
@@ -304,6 +306,28 @@ if(appRoot && createApp){
             this.rideMessage="";
             this.ride.model=model;
             this.testRide=true;
+
+        },
+
+
+        dismissBooking(){
+
+            this.testRide=false;
+
+        },
+
+
+        goBackFromBooking(){
+
+            if(this.bookingReturnUrl){
+
+                window.location.href=this.bookingReturnUrl;
+
+                return;
+
+            }
+
+            this.dismissBooking();
 
         },
 
@@ -1250,8 +1274,20 @@ if(appRoot && createApp){
 
         });
 
+        const bookingQuery =
+            new URLSearchParams(window.location.search);
+
         const bookingModel =
-            new URLSearchParams(window.location.search).get("book");
+            bookingQuery.get("book");
+
+        const bookingReturnUrl =
+            bookingQuery.get("return");
+
+        if(bookingReturnUrl && /^[a-z0-9-]+\.html$/i.test(bookingReturnUrl)){
+
+            this.bookingReturnUrl=bookingReturnUrl;
+
+        }
 
         const bookingModels={
             adventure:"KTM 390 Adventure",
@@ -1280,6 +1316,33 @@ document.querySelectorAll(".navbar").forEach(navbar=>{
 
     if(!menu || !nav){
         return;
+    }
+
+    if(!navbar.querySelector(".nav-back")){
+
+        const backButton=document.createElement("button");
+
+        backButton.className="nav-back";
+        backButton.type="button";
+        backButton.textContent="BACK";
+        backButton.setAttribute("aria-label", "Go back to the previous page");
+
+        backButton.addEventListener("click", ()=>{
+
+            if(document.referrer && window.history.length>1){
+
+                window.history.back();
+
+                return;
+
+            }
+
+            window.location.href="index.html";
+
+        });
+
+        navbar.insertBefore(backButton, menu);
+
     }
 
     menu.setAttribute("aria-expanded", "false");

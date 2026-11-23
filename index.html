@@ -310,7 +310,7 @@
 
         <div class="section-heading">
 
-            <p>REAL MEDIA / DIGITAL MOTION</p>
+            <p>VISUAL SEQUENCE / 01–03</p>
 
             <h2>
                 SEE IT.
@@ -318,61 +318,51 @@
             </h2>
 
             <p class="media-intro">
-                Real motorcycle photography, cinematic riding footage and an interactive 3D bike scene in one experience.
+                Scroll through the product story in sequence: adventure stance, close-up detail and street performance.
             </p>
 
         </div>
 
-        <div class="media-grid">
+        <div class="media-grid media-sequence">
 
-            <figure class="media-card media-video">
-
-                <video
-                    autoplay
-                    muted
-                    loop
-                    playsinline
-                    controls
-                    preload="metadata"
-                    poster="bike.webp">
-
-                    <source src="https://videos.pexels.com/video-files/9606708/9606708-hd_1920_1080_30fps.mp4" type="video/mp4">
-
-                    Your browser cannot play this video. Use the image gallery beside it instead.
-
-                </video>
-
-                <figcaption>
-                    <span>CINEMATIC RIDE</span>
-                    Motion for the 4D experience
-                </figcaption>
-
-            </figure>
-
-            <figure class="media-card media-photo media-photo-large">
+            <figure class="media-card">
 
                 <img
-                    src="bike.webp"
-                    alt="KTM motorcycle photographed at night"
+                    src="bike2.webp"
+                    alt="KTM 390 Adventure product view"
                     loading="lazy">
 
                 <figcaption>
-                    <span>REAL WORLD</span>
-                    Built for the road beyond the screen
+                    <span>01 / ADVENTURE</span>
+                    The journey starts with the rally-ready stance.
                 </figcaption>
 
             </figure>
 
-            <figure class="media-card media-photo">
+            <figure class="media-card">
 
                 <img
                     src="images%20(1).jpg"
-                    alt="KTM adventure motorcycle on display"
+                    alt="KTM adventure motorcycle detail"
                     loading="lazy">
 
                 <figcaption>
-                    <span>DETAIL STUDY</span>
-                    Mechanical character in focus
+                    <span>02 / DETAIL</span>
+                    Mechanical character in closer focus.
+                </figcaption>
+
+            </figure>
+
+            <figure class="media-card">
+
+                <img
+                    src="bike.webp"
+                    alt="KTM motorcycle riding at night"
+                    loading="lazy">
+
+                <figcaption>
+                    <span>03 / STREET</span>
+                    Finish with the Duke's night-riding energy.
                 </figcaption>
 
             </figure>
@@ -380,7 +370,7 @@
         </div>
 
         <p class="media-credit">
-            Local motorcycle photography and riding footage are used for this promotional concept.
+            Images are arranged in the intended riding-story order.
         </p>
 
     </section>
@@ -1125,14 +1115,15 @@
 
     <div class="modal"
          v-if="testRide"
-         @click.self="testRide=false">
+         @click.self="dismissBooking">
 
 
         <div class="modal-box">
 
 
             <button class="close"
-                    @click="testRide=false">
+                    @click="dismissBooking"
+                    aria-label="Close booking form">
 
                 ×
 
@@ -1227,13 +1218,25 @@
             >
 
 
-            <button class="orange-btn"
-                    @click="bookRide"
-                    :disabled="rideSubmitting">
+            <div class="modal-actions">
 
-                {{ rideSubmitting ? "SUBMITTING..." : "REQUEST TEST RIDE" }}
+                <button class="dark-btn modal-back"
+                        type="button"
+                        @click="goBackFromBooking">
 
-            </button>
+                    BACK
+
+                </button>
+
+                <button class="orange-btn"
+                        @click="bookRide"
+                        :disabled="rideSubmitting">
+
+                    {{ rideSubmitting ? "SUBMITTING..." : "REQUEST TEST RIDE" }}
+
+                </button>
+
+            </div>
 
 
             <p v-if="rideMessage"
